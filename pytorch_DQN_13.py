@@ -64,11 +64,11 @@ class DQN(object):
         b_s=torch.FloatTensor(b_memory[:,N_STATE])
         b_a=torch.LongTensor(b_memory[:,N_STATE:N_STATE+1].astype(int))
         b_r=torch.FloatTensor(b_memory[:,N_STATE+1:N_STATE+2])
-        b_s=torch.FloatTensor(b_memory[:,-N_STATE:])
+        b_s_=torch.FloatTensor(b_memory[:,-N_STATE:])
 
         #
         q_eval=self.eval_net(b_s).gather(1,b_a)
-        q_next=self.target_net(b_s).detach()
+        q_next=self.target_net(b_s_).detach()
         q_target=b_r+GAMMA*q_next.max(1)[0].view(BATCH_SIZE,1)
         loss=self.loss_func(q_eval,q_target)
 
